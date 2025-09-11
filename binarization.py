@@ -3,8 +3,8 @@ import numpy as np                 #для работы с многомерны�
 import matplotlib.pyplot as mp     #для визуализации и построения графиков
 from sklearn.datasets import load_sample_images     #Библиотека для машинного обучения, но содержит полезные datasets
 
-import sys
-import argparse
+dataset = load_sample_images()
+image = dataset.images[1]
 
 #вывод преобразованных изображений + исходник
 def displaying_image(img_output, result_1, result_2):
@@ -22,25 +22,10 @@ def displaying_image(img_output, result_1, result_2):
 
     mp.show()
 
-#загрузка изображения
-def loading_transformation_displaying(image):
-    img = cv2.imread(image, cv2.IMREAD_GRAYSCALE)   #преобразование изображения в двумерный массив (с помощью grayscale)
-    img_output = cv2.imread(image, cv2.IMREAD_COLOR)
+img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)   #преобразование изображения (с цветного в чб)
+a, b = 255, 127
 
-    #проверка успешной загрузки
-    if img is None or img_output is None:
-        print(f"Ошибка: Не удалось загрузить изображение '{image}'.")
-        sys.exit(1)
+retval, result_bin1 = cv2.threshold(img, b, a, cv2.THRESH_BINARY) #пороговая бинаризация
+result_bin2 = cv2.adaptiveThreshold(img, a, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2) #адаптивная бинаризация
 
-    retval, result_bin1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY) #пороговая бинаризация
-    result_bin2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2) #адаптивная бинаризация
-
-    displaying_image(img_output, result_bin1, result_bin2)
-
-#парсинг входных данных
-if __name__ == "__main__": 
-    parser = argparse.ArgumentParser(description='Обработка изображений')
-    parser.add_argument('input_image', help='исходник')
-    
-    args = parser.parse_args()
-    loading_transformation_displaying(args.input_image)
+displaying_image(image, result_bin1, result_bin2)
