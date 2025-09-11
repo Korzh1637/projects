@@ -1,7 +1,7 @@
 import cv2                         #главная библиотека для компьютерного зрения и обработки изображений
 import numpy as np                 #для работы с многомерными массивами и математическими операциями
 import matplotlib.pyplot as mp     #для визуализации и построения графиков
-from sklearn.datasets import load_sample_images     #Библиотека для машинного обучения, но содержит полезные datasets
+from sklearn.datasets import load_sample_images     #datasets
 
 dataset = load_sample_images()
 image = dataset.images[1]
@@ -29,3 +29,4 @@ retval, result_bin1 = cv2.threshold(img, b, a, cv2.THRESH_BINARY) #порого�
 result_bin2 = cv2.adaptiveThreshold(img, a, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2) #адаптивная бинаризация
 
 displaying_image(image, result_bin1, result_bin2)
+
